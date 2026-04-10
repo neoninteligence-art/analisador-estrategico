@@ -2,29 +2,48 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Aion Strategic Analyzer - ROI v1.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aion Strategic Analyzer - ROI v1.1</title>
     <style>
-        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { border: 1px solid #00ff41; padding: 30px; box-shadow: 0 0 15px #00ff41; max-width: 500px; width: 90%; text-align: center; }
-        input { width: 100%; padding: 10px; margin: 10px 0; background: #111; border: 1px solid #00ff41; color: #00ff41; }
-        button { background: #00ff41; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; width: 100%; }
-        #result { margin-top: 20px; font-size: 0.9em; text-align: left; border-top: 1px solid #333; padding-top: 10px; display: none; }
+        body { background: #050505; color: #00ff41; font-family: 'Courier New', monospace; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; }
+        .container { border: 1px solid #00ff41; padding: 30px; box-shadow: 0 0 20px #00ff41; max-width: 500px; width: 100%; text-align: center; background: rgba(0,0,0,0.9); }
+        input { width: 100%; padding: 12px; margin: 15px 0; background: #111; border: 1px solid #333; color: #00ff41; font-size: 1.1em; text-align: center; }
+        input:focus { border-color: #00ff41; outline: none; }
+        button { background: #00ff41; color: #000; border: none; padding: 15px 30px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1em; letter-spacing: 1px; }
+        button:hover { background: #00cc33; }
+        #result { margin-top: 25px; font-size: 0.95em; text-align: left; border-top: 1px solid #222; padding-top: 15px; display: none; line-height: 1.6; }
+        .solution-btn { display: inline-block; margin-top: 20px; background: #ff003c; color: #fff; padding: 15px; text-decoration: none; font-weight: bold; border-radius: 4px; width: 100%; box-sizing: border-box; text-align: center; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 0, 60, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 0, 60, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 0, 60, 0); } }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3>[AION_STRATEGY_ANALYZER]</h3>
-        <p>Insira o custo da sua operação mensal (R$):</p>
-        <input type="number" id="cost" placeholder="Ex: 5000">
-        <button onclick="run()">PROCESSAR ASSIMETRIA</button>
-        <div id="result"></div>
+        <h3>[AION_SYSTEM_OVERRIDE]</h3>
+        <p>IDENTIFICAÇÃO DE VULNERABILIDADE FINANCEIRA</p>
+        <p style="font-size: 0.8em; color: #666;">Insira o custo operacional mensal total (R$):</p>
+        <input type="number" id="cost" placeholder="Ex: 5000" onkeydown="if(event.key==='Enter') run()">
+        <button onclick="run()">EXECUTAR ANÁLISE DE FLUXO</button>
+        
+        <div id="result">
+            <div id="text-res"></div>
+            <a href="Https://www.hostinger.com/br?REFERRALCODE=ELANEONINTLT" target="_blank" class="solution-btn">ESTANCAR PERDA: IMPLEMENTAR AUTOMAÇÃO AGORA</a>
+            <p style="font-size: 0.7em; color: #888; margin-top: 10px;">* Clique acima para hospedar sua infraestrutura de IA com desconto de parceiro.</p>
+        </div>
     </div>
+
     <script>
         function run() {
             const cost = document.getElementById('cost').value;
+            if(!cost) return;
             const res = document.getElementById('result');
+            const text = document.getElementById('text-res');
             res.style.display = 'block';
-            res.innerHTML = "Calculando sinapses...<br>Identificando gargalos...<br><br><b>[DIAGNÓSTICO]:</b> Você está perdendo aproximadamente " + (cost * 0.35).toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'}) + " por mês por falta de automação de fluxo.<br><br><b>[RECOMENDAÇÃO]:</b> Utilize a ferramenta de Fluxo Autônomo para recuperar 40% do seu tempo.";
+            
+            let loss = cost * 0.35;
+            text.innerHTML = `<b>[STATUS]: CRÍTICO</b><br><br>` +
+                           `Vazamento de capital detectado: <b>${loss.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})} / mês</b><br>` +
+                           `Origem: Processos manuais e falta de infraestrutura dedicada.<br><br>` +
+                           `<b>[SOLUÇÃO]:</b> Migrar operações para servidor de alta performance e implementar scripts de automação.`;
         }
     </script>
 </body>
