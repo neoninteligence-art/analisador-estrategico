@@ -1,28 +1,75 @@
-        function run() {
-            const cost = document.getElementById('cost').value;
-            if(!cost || cost <= 0) return;
-            const res = document.getElementById('result');
-            const text = document.getElementById('text-res');
-            res.style.display = 'block';
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aion Bio-Static - Auditoria Metabólica</title>
+    <style>
+        body { background: #f0f4f8; color: #2d3436; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        .container { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 450px; width: 100%; text-align: center; border-top: 6px solid #0984e3; }
+        h2 { color: #0984e3; margin-bottom: 10px; font-size: 1.5rem; }
+        p { font-size: 0.9rem; color: #636e72; margin-bottom: 25px; }
+        label { display: block; text-align: left; font-size: 0.8rem; font-weight: bold; margin-bottom: 5px; color: #2d3436; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #dfe6e9; border-radius: 6px; box-sizing: border-box; background: #fafafa; }
+        button { background: #0984e3; color: white; border: none; padding: 15px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; transition: 0.3s; }
+        button:hover { background: #074b83; }
+        #result { margin-top: 30px; display: none; text-align: left; background: #eef2f7; padding: 20px; border-radius: 8px; border-left: 4px solid #00b894; }
+        .btn-solucao { display: block; margin-top: 20px; background: #00b894; color: white; text-decoration: none; padding: 15px; border-radius: 6px; text-align: center; font-weight: bold; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Aion Bio-Static</h2>
+        <p>Análise de Idade Metabólica e Estresse Celular v1.0</p>
+        
+        <label>Idade Real:</label>
+        <input type="number" id="age" placeholder="Ex: 35">
+        
+        <label>Seu Peso Atual (kg):</label>
+        <input type="number" id="weight" placeholder="Ex: 85">
+        
+        <label>Nível de Atividade:</label>
+        <select id="activity">
+            <option value="1.5">Sedentário</option>
+            <option value="1.2">Moderado (1-2x semana)</option>
+            <option value="0.9">Ativo (3x+ semana)</option>
+        </select>
+        
+        <button onclick="analisar()">EXECUTAR BIOMETRIA</button>
+        
+        <div id="result">
+            <div id="content-res"></div>
+            <a href="https://pay.kiwify.com.br/SUA_PAGINA_AQUI" id="affiliate-link" target="_blank" class="btn-solucao">OBTER MEU PROTOCOLO DE CHOQUE</a>
+        </div>
+    </div>
+
+    <script>
+        function analisar() {
+            const age = parseInt(document.getElementById('age').value);
+            const weight = parseInt(document.getElementById('weight').value);
+            const activity = parseFloat(document.getElementById('activity').value);
             
-            // Simulação de processamento para dar peso
-            text.innerHTML = "Consultando bancos de dados de eficiência operacional...";
-            
+            if(!age || !weight) return;
+
+            const resDiv = document.getElementById('result');
+            const content = document.getElementById('content-res');
+            resDiv.style.display = 'block';
+            content.innerHTML = "Processando marcadores biológicos...";
+
             setTimeout(() => {
-                let loss = cost * 0.35;
-                let efficiency = 100 - 35;
+                // Lógica de cálculo fictícia para impacto psicológico
+                let bioAge = Math.round(age + (weight * 0.1) * activity);
                 
-                text.innerHTML = `
-                    <b style="color: #fff;">[RELATÓRIO DE AUDITORIA AION v1.1]</b><br>
-                    ---------------------------------------<br>
-                    <b>Análise de Fluxo:</b> Concluída<br>
-                    <b>Eficiência Estimada:</b> ${efficiency}%<br>
-                    <b>Ociosidade de Capital:</b> ${loss.toLocaleString('pt-BR', {style: 'currency', currency: 'BRL'})}/mês<br>
-                    ---------------------------------------<br><br>
-                    <b>Diagnóstico Preliminar:</b><br>
-                    Identificamos um gargalo severo na camada de infraestrutura. A ausência de processos automatizados e o uso de servidores compartilhados de baixa performance estão gerando uma latência operacional que consome aproximadamente 35% do seu aporte mensal.<br><br>
-                    <b>Recomendação Estratégica:</b><br>
-                    Para estancar o vazamento, é imperativo migrar o núcleo da operação para um ambiente dedicado com scripts de automação ativos.
+                content.innerHTML = `
+                    <b style="color: #d63031;">[ALERTA: DISCREPÂNCIA DETECTADA]</b><br><br>
+                    <b>Idade Metabólica Estimada:</b> ${bioAge} anos<br>
+                    <b>Status:</b> Desaceleração Mitocondrial<br><br>
+                    <b>Diagnóstico:</b> Seu metabolismo está operando como se você tivesse ${bioAge - age} anos a mais. Isso indica acúmulo de toxinas teciduais.<br><br>
+                    <b>Dica Prática:</b> Substitua o café em jejum por 200ml de água morna com limão por 7 dias para resetar o pH gástrico.
                 `;
-            }, 800);
+            }, 1200);
         }
+    </script>
+</body>
+</html>
