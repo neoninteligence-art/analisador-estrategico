@@ -1,164 +1,39 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aion Bio-Static | Scanner Metabólico</title>
-    <style>
-        :root { --primary: #2c3e50; --accent: #e74c3c; --success: #27ae60; }
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        #app-container { background: white; width: 95%; max-width: 450px; padding: 25px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .header { text-align: center; margin-bottom: 20px; }
-        .progress-bar { height: 6px; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
-        #progress { height: 100%; background: var(--primary); width: 10%; transition: 0.4s; }
-        .step { display: none; }
-        .step.active { display: block; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        h1 { font-size: 1.2rem; color: var(--primary); margin-bottom: 15px; text-align: center; }
-        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
-        .btn-next { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .opçao { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #dfe6e9; border-radius: 10px; background: white; cursor: pointer; text-align: left; transition: 0.3s; }
-        .opçao:hover { background: #f8f9fa; border-color: var(--primary); }
-        
-        #loading-screen { display: none; text-align: center; padding: 40px 0; }
-        .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        #resultado { display: none; text-align: center; }
-        #medidor-bio { font-size: 64px; font-weight: 800; color: var(--accent); margin: 15px 0; }
-        .alerta { border-radius: 10px; padding: 15px; text-align: left; font-size: 0.9rem; margin-bottom: 20px; border: 1px solid #ddd; }
-        .btn-checkout { background: var(--success); color: white; padding: 20px; text-decoration: none; border-radius: 50px; font-weight: bold; display: block; animation: pulse 2s infinite; font-size: 1.1rem; }
-        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); } 70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); } 100% { transform: scale(1); } }
-    </style>
+    <title>Global Engine</title>
 </head>
 <body>
-
-<div id="app-container">
-    <div class="header">
-        <span style="font-size: 0.8rem; font-weight: bold; color: #95a5a6; letter-spacing: 2px;">SISTEMA AION v1.4</span>
-    </div>
-    <div class="progress-bar"><div id="progress"></div></div>
-
-    <div class="step active" id="step1">
-        <h1>Dados Biométricos</h1>
-        <input type="number" id="idade_real" placeholder="Sua Idade Real">
-        <input type="number" id="peso" placeholder="Peso atual (kg)">
-        <input type="number" id="altura" placeholder="Altura (cm) Ex: 175">
-        <button class="btn-next" onclick="nextStep(1)">CONTINUAR ANÁLISE</button>
-    </div>
-
-    <div class="step" id="step2">
-        <h1>Nível de atividade física?</h1>
-        <button class="opçao" onclick="saveData('habito', 0); nextStep(2)">Ativo (3x+ por semana)</button>
-        <button class="opçao" onclick="saveData('habito', 7); nextStep(2)">Moderado (1-2x por semana)</button>
-        <button class="opçao" onclick="saveData('habito', 15); nextStep(2)">Sedentário (Nenhuma)</button>
-    </div>
-
-    <div class="step" id="step3">
-        <h1>Qualidade do despertar?</h1>
-        <button class="opçao" onclick="saveData('sono', 0); nextStep(3)">Disposto e renovado</button>
-        <button class="opçao" onclick="saveData('sono', 5); nextStep(3)">Cansado/Com sono</button>
-        <button class="opçao" onclick="saveData('sono', 12); nextStep(3)">Exausto/Fadiga crônica</button>
-    </div>
-
-    <div class="step" id="step4">
-        <h1>Consumo de açúcar/massas?</h1>
-        <button class="opçao" onclick="iniciarProcessamento(0)">Raramente</button>
-        <button class="opçao" onclick="iniciarProcessamento(8)">3 a 4 vezes por semana</button>
-        <button class="opçao" onclick="iniciarProcessamento(14)">Todos os dias</button>
-    </div>
-
-    <div id="loading-screen">
-        <div class="spinner"></div>
-        <p id="loading-text" style="color: #7f8c8d; font-weight: bold;">Cruzando dados biométricos...</p>
-    </div>
-
-    <div id="resultado">
-        <p style="text-transform: uppercase; font-size: 0.7rem; font-weight: bold; color: #7f8c8d;">Resultado da Análise Celular</p>
-        <div id="medidor-bio">-- ANOS</div>
+    <script>
+        // Sistema de Redirecionamento Inteligente por IP
+        // Este script deve ser hospedado no Vercel
         
-        <div class="alerta" id="alerta-box">
-            </div>
+        async function routeTraffic() {
+            try {
+                // Busca a localização do IP do usuário (API gratuita)
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                const country = data.country_code; // Ex: BR, US, IN
 
-        <div style="margin-bottom: 20px; border: 1px solid #eee; padding: 10px; border-radius: 10px;">
-            <img src="https://img.braip.com/produtos/produ89w3/nfityp00/v-1698246835.png" width="80">
-            <p style="font-size: 0.8rem; margin: 5px 0;"><strong>Protocolo recomendado:</strong> N-FIT DETOX BLACK</p>
-        </div>
+                // LINKS DE ARBITRAGEM (Substitua pelos seus links de Smartlink/CPA)
+                const offers = {
+                    "US": "https://sua-oferta-premium-usa.com",
+                    "BR": "https://sua-oferta-brasil.com",
+                    "DEFAULT": "https://seu-smartlink-global.com"
+                };
 
-        <a href="https://ev.braip.com/ref?pv=pro3lq9z&af=afiznxeze" class="btn-checkout">LIBERAR MEU PROTOCOLO</a>
-    </div>
-</div>
-
-<script>
-    let userData = {};
-    let currentStep = 1;
-
-    function nextStep(step) {
-        if(step === 1) {
-            userData.idade = parseInt(document.getElementById('idade_real').value);
-            userData.peso = parseFloat(document.getElementById('peso').value);
-            userData.altura = parseFloat(document.getElementById('altura').value) / 100;
-            if(!userData.idade || !userData.peso || !userData.altura) { alert("Preencha todos os campos corretamente."); return; }
-        }
-        document.getElementById('step' + currentStep).classList.remove('active');
-        currentStep++;
-        document.getElementById('step' + currentStep).classList.add('active');
-        document.getElementById('progress').style.width = (currentStep * 25) + "%";
-    }
-
-    function saveData(key, val) { userData[key] = val; }
-
-    function iniciarProcessamento(pontosExtra) {
-        userData.dieta = pontosExtra;
-        document.getElementById('step4').classList.remove('active');
-        document.getElementById('loading-screen').style.display = 'block';
-        
-        const frases = ["Calculando IMC...", "Analisando perfil oxidativo...", "Verificando idade celular...", "Gerando prescrição..."];
-        let i = 0;
-        const interval = setInterval(() => {
-            if(i < frases.length) {
-                document.getElementById('loading-text').innerText = frases[i];
-                i++;
+                const destination = offers[country] || offers["DEFAULT"];
+                
+                // Redirecionamento instantâneo
+                window.location.replace(destination);
+            } catch (e) {
+                // Se falhar, manda para o link global padrão
+                window.location.replace("https://seu-smartlink-global.com");
             }
-        }, 1000);
-
-        setTimeout(() => {
-            clearInterval(interval);
-            exibirResultado();
-        }, 4000);
-    }
-
-    function exibirResultado() {
-        let imc = userData.peso / (userData.altura * userData.altura);
-        let penalidadeIMC = imc > 25 ? (imc - 25) * 1.8 : 0;
-        let idadeMetabolica = Math.round(userData.idade + penalidadeIMC + userData.habito + userData.sono + userData.dieta);
-        
-        let titulo, cor, msg;
-        if (imc < 18.5) {
-            titulo = "STATUS: Déficit de Renovação";
-            cor = "#f39c12";
-            msg = "Baixo IMC detectado. Seu corpo está em modo catabólico, degradando fibras musculares para compensar a falta de nutrientes.";
-        } else if (imc >= 18.5 && imc <= 24.9) {
-            titulo = "STATUS: Oxidação Celular Silenciosa";
-            cor = "#3498db";
-            msg = "Peso dentro da média, porém detectamos sinais de <strong>falsa magreza</strong>. A inflamação interna pode estar acelerando sua idade celular.";
-        } else {
-            titulo = "STATUS: Alerta de Estocagem Visceral";
-            cor = "#c53030";
-            msg = "Metabolismo em modo de preservação. O excesso de gordura entre os órgãos está intoxicando suas mitocôndrias e travando a queima.";
         }
 
-        const alertaBox = document.getElementById('alerta-box');
-        alertaBox.style.borderColor = cor;
-        alertaBox.style.backgroundColor = cor + "10"; // Cor leve no fundo
-        alertaBox.innerHTML = `<strong style="color: ${cor};">${titulo}</strong><br><p style="margin: 5px 0 0 0;">${msg}</p>`;
-
-        document.getElementById('loading-screen').style.display = 'none';
-        document.getElementById('progress').style.width = "100%";
-        document.getElementById('medidor-bio').innerText = idadeMetabolica + " ANOS";
-        document.getElementById('resultado').style.display = 'block';
-    }
-</script>
-
+        routeTraffic();
+    </script>
+    <p>Redirecionando para a melhor oferta...</p>
 </body>
 </html>
