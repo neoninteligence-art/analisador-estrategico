@@ -3,103 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aion Bio-Static | Análise Metabólica</title>
+    <title>Aion Bio-Static | Scanner Metabólico</title>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        #app-container { background: white; width: 90%; max-width: 500px; padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
-        .pergunta { display: none; text-align: center; }
-        .pergunta.ativa { display: block; }
-        h1 { color: #2c3e50; font-size: 1.4rem; margin-bottom: 20px; }
-        button.opçao { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #dfe6e9; border-radius: 10px; background: white; cursor: pointer; font-size: 1rem; transition: 0.3s; }
-        button.opçao:hover { background: #f1f2f6; border-color: #3498db; }
+        :root { --primary: #2c3e50; --accent: #e74c3c; --success: #27ae60; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f0f2f5; margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        #app-container { background: white; width: 95%; max-width: 450px; padding: 25px; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .header { text-align: center; margin-bottom: 20px; }
+        .progress-bar { height: 6px; background: #eee; border-radius: 10px; margin-bottom: 20px; overflow: hidden; }
+        #progress { height: 100%; background: var(--primary); width: 10%; transition: 0.4s; }
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.5s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h1 { font-size: 1.2rem; color: var(--primary); margin-bottom: 15px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; font-size: 1rem; }
+        .btn-next { background: var(--primary); color: white; border: none; width: 100%; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .opçao { display: block; width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #dfe6e9; border-radius: 10px; background: white; cursor: pointer; text-align: left; transition: 0.3s; }
+        .opçao:hover { background: #f8f9fa; border-color: var(--primary); }
         
-        /* Estilo do Resultado (Página de Prescrição) */
-        #resultado-container { display: none; text-align: center; }
-        #medidor-bio { font-size: 56px; font-weight: 800; color: #e74c3c; margin: 20px 0; }
-        .alerta { background: #fdf2f2; border: 1px solid #fab1a0; border-radius: 8px; padding: 15px; text-align: left; margin-bottom: 25px; }
-        
-        @keyframes pulse-green {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.7); }
-            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(39, 174, 96, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0); }
-        }
-        .btn-premium {
-            background: #27ae60; color: white; padding: 20px; text-decoration: none; 
-            border-radius: 50px; font-weight: bold; display: block; font-size: 1.1rem;
-            animation: pulse-green 2s infinite; margin-top: 20px;
-        }
+        /* Loading Screen */
+        #loading-screen { display: none; text-align: center; padding: 40px 0; }
+        .spinner { width: 50px; height: 50px; border: 5px solid #eee; border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* Resultado */
+        #resultado { display: none; text-align: center; }
+        #medidor-bio { font-size: 64px; font-weight: 800; color: var(--accent); margin: 15px 0; }
+        .alerta { background: #fff5f5; border: 1px solid #feb2b2; border-radius: 10px; padding: 15px; text-align: left; font-size: 0.9rem; margin-bottom: 20px; }
+        .btn-checkout { background: var(--success); color: white; padding: 20px; text-decoration: none; border-radius: 50px; font-weight: bold; display: block; animation: pulse 2s infinite; font-size: 1.1rem; }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(39, 174, 96, 0.4); } 70% { transform: scale(1.03); box-shadow: 0 0 0 10px rgba(39, 174, 96, 0); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
 
 <div id="app-container">
-    <div id="quiz">
-        <div class="pergunta ativa" id="p1">
-            <h1>Qual seu nível de cansaço diário?</h1>
-            <button class="opçao" onclick="proxima(5)">Sinto-me disposto(a)</button>
-            <button class="opçao" onclick="proxima(10)">Cansaço moderado à tarde</button>
-            <button class="opçao" onclick="proxima(15)">Exausto(a) o dia todo</button>
-        </div>
+    <div class="header">
+        <span style="font-size: 0.8rem; font-weight: bold; color: #95a5a6; letter-spacing: 2px;">SISTEMA AION v1.3</span>
+    </div>
+    <div class="progress-bar"><div id="progress"></div></div>
 
-        <div class="pergunta" id="p2">
-            <h1>Como está sua qualidade de sono?</h1>
-            <button class="opçao" onclick="proxima(5)">Durmo bem (7h+)</button>
-            <button class="opçao" onclick="proxima(12)">Acordo cansado(a)</button>
-            <button class="opçao" onclick="proxima(18)">Insônia constante</button>
-        </div>
-
-        <div class="pergunta" id="p3">
-            <h1>Frequência de atividade física?</h1>
-            <button class="opçao" onclick="finalizar(-5)">Ativo (3x+ na semana)</button>
-            <button class="opçao" onclick="finalizar(8)">Sedentário(a)</button>
-            <button class="opçao" onclick="finalizar(15)">Raramente me exercito</button>
-        </div>
+    <div class="step active" id="step1">
+        <h1>Dados Biométricos</h1>
+        <input type="number" id="idade_real" placeholder="Sua Idade Real">
+        <input type="number" id="peso" placeholder="Peso atual (kg)">
+        <input type="number" id="altura" placeholder="Altura (cm) Ex: 170">
+        <button class="btn-next" onclick="nextStep(1)">CONTINUAR ANALISE</button>
     </div>
 
-    <div id="resultado-container">
-        <h2 style="color: #2c3e50; font-size: 1.1rem; text-transform: uppercase;">Relatório Aion Bio-Static</h2>
-        <hr style="border:0; height:1px; background:#eee;">
-        
-        <p style="color: #7f8c8d; margin-top: 20px;">Sua Idade Metabólica Estimada:</p>
+    <div class="step" id="step2">
+        <h1>Qual seu nível de atividade física?</h1>
+        <button class="opçao" onclick="saveData('habito', 0); nextStep(2)">Ativo (3x+ por semana)</button>
+        <button class="opçao" onclick="saveData('habito', 7); nextStep(2)">Moderado (1-2x por semana)</button>
+        <button class="opçao" onclick="saveData('habito', 15); nextStep(2)">Sedentário (Nenhuma)</button>
+    </div>
+
+    <div class="step" id="step3">
+        <h1>Como você acorda na maioria dos dias?</h1>
+        <button class="opçao" onclick="saveData('sono', 0); nextStep(3)">Disposto e renovado</button>
+        <button class="opçao" onclick="saveData('sono', 5); nextStep(3)">Ainda com um pouco de sono</button>
+        <button class="opçao" onclick="saveData('sono', 12); nextStep(3)">Exausto, como se não tivesse dormido</button>
+    </div>
+
+    <div class="step" id="step4">
+        <h1>Consumo de doces/carboidratos?</h1>
+        <button class="opçao" onclick="iniciarProcessamento(0)">Raramente</button>
+        <button class="opçao" onclick="iniciarProcessamento(8)">3 a 4 vezes por semana</button>
+        <button class="opçao" onclick="iniciarProcessamento(14)">Todos os dias</button>
+    </div>
+
+    <div id="loading-screen">
+        <div class="spinner"></div>
+        <p id="loading-text" style="color: #7f8c8d; font-weight: bold;">Processando dados biométricos...</p>
+    </div>
+
+    <div id="resultado">
+        <p style="text-transform: uppercase; font-size: 0.7rem; font-weight: bold; color: #7f8c8d;">Resultado da Análise Celular</p>
         <div id="medidor-bio">-- ANOS</div>
         
         <div class="alerta">
-            <strong style="color: #d63031;">⚠️ Desgaste Celular Detectado:</strong>
-            <p style="font-size: 0.9rem; color: #2d3436; margin: 5px 0 0 0;">
-                Seu metabolismo entrou em modo de preservação. Isso causa o acúmulo de gordura visceral e fadiga crônica.
-            </p>
+            <strong style="color: #c53030;">STATUS: Alerta Metabólico Detectado</strong><br>
+            <p style="margin: 5px 0 0 0;">O cruzamento de dados indica que seu metabolismo está em modo de <strong>estocagem visceral</strong>. Suas células apresentam desgaste compatível com a idade acima.</p>
         </div>
 
-        <div style="border: 1px solid #dfe6e9; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
-            <img src="https://img.braip.com/produtos/produ89w3/nfityp00/v-1698246835.png" style="width: 100px;">
-            <h3 style="margin: 10px 0 5px 0; font-size: 1rem;">N-FIT DETOX BLACK</h3>
-            <p style="font-size: 0.8rem; color: #7f8c8d;">Protocolo de Reset Metabólico Recomendado</p>
+        <div style="margin-bottom: 20px; border: 1px solid #eee; padding: 10px; border-radius: 10px;">
+            <img src="https://img.braip.com/produtos/produ89w3/nfityp00/v-1698246835.png" width="80">
+            <p style="font-size: 0.8rem; margin: 5px 0;"><strong>Protocolo sugerido:</strong> N-FIT DETOX BLACK</p>
         </div>
 
-        <a href="https://ev.braip.com/ref?pv=pro3lq9z&af=afiznxeze" class="btn-premium">
-            INICIAR RESET AGORA
-        </a>
-        
-        <p style="font-size: 0.7rem; color: #b2bec3; margin-top: 15px;">Análise baseada em bio-estatística comportamental.</p>
+        <a href="https://ev.braip.com/ref?pv=pro3lq9z&af=afiznxeze" class="btn-checkout">LIBERAR MEU PROTOCOLO</a>
     </div>
 </div>
 
 <script>
-    let pontuaçaoTotal = 30; // Idade base
-    let fase = 1;
+    let userData = {};
+    let currentStep = 1;
 
-    function proxima(pontos) {
-        pontuaçaoTotal += pontos;
-        document.getElementById('p' + fase).classList.remove('ativa');
-        fase++;
-        document.getElementById('p' + fase).classList.add('ativa');
+    function nextStep(step) {
+        if(step === 1) {
+            userData.idade = parseInt(document.getElementById('idade_real').value);
+            userData.peso = parseFloat(document.getElementById('peso').value);
+            userData.altura = parseFloat(document.getElementById('altura').value) / 100;
+            if(!userData.idade || !userData.peso || !userData.altura) { alert("Preencha todos os campos"); return; }
+        }
+        document.getElementById('step' + currentStep).classList.remove('active');
+        currentStep++;
+        document.getElementById('step' + currentStep).classList.add('active');
+        document.getElementById('progress').style.width = (currentStep * 25) + "%";
     }
 
-    function finalizar(pontos) {
-        pontuaçaoTotal += pontos;
-        document.getElementById('quiz').style.display = 'none';
-        document.getElementById('medidor-bio').innerText = pontuaçaoTotal + " ANOS";
-        document.getElementById('resultado-container').style.display = 'block';
+    function saveData(key, val) { userData[key] = val; }
+
+    function iniciarProcessamento(pontosExtra) {
+        userData.dieta = pontosExtra;
+        document.getElementById('step4').classList.remove('active');
+        document.getElementById('loading-screen').style.display = 'block';
+        
+        const frases = ["Calculando IMC...", "Analisando perfil lipídico...", "Verificando idade celular...", "Gerando prescrição..."];
+        let i = 0;
+        const interval = setInterval(() => {
+            if(i < frases.length) {
+                document.getElementById('loading-text').innerText = frases[i];
+                i++;
+            }
+        }, 1000);
+
+        setTimeout(() => {
+            clearInterval(interval);
+            exibirResultado();
+        }, 4000);
+    }
+
+    function exibirResultado() {
+        let imc = userData.peso / (userData.altura * userData.altura);
+        let penalidadeIMC = imc > 25 ? (imc - 25) * 1.8 : 0;
+        let idadeMetabolica = Math.round(userData.idade + penalidadeIMC + userData.habito + userData.sono + userData.dieta);
+        
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('progress').style.width = "100%";
+        document.getElementById('medidor-bio').innerText = idadeMetabolica + " ANOS";
+        document.getElementById('resultado').style.display = 'block';
     }
 </script>
 
